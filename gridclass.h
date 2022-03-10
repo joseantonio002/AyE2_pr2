@@ -12,7 +12,7 @@ class Grid {
     Grid(int row, int colum);
     const Cell& getCell(Position pos) const;
     void show() const;
-    void generatealive(vector<Position> v);
+    void generatealive(vector<Position> v, vector<int> states);
     void nextgen();
   private:
     Cell** grid;

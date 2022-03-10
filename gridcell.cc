@@ -3,8 +3,9 @@
 //En el mismo fichero ya que ambas clases son dependientes la una de la otra
 //------------------------------------------------------------------
 #include "gridclass.h"
+/******** VOY A PONER "NC" EN LAS FUNCIONES QUE NO CAMBIEN******/
 
-Grid::Grid(int row, int colum) {
+Grid::Grid(int row, int colum) { //NC
   nrowo = row;
   ncolo = colum;
   row = 2 + row;  //Paredes
@@ -28,7 +29,7 @@ Grid::Grid(int row, int colum) {
   ncol = colum;
 }
 
-void Grid::show() const {
+void Grid::show() const { //NC
   for(int i = 0; i < nrow; i++) {
     for(int j = 0; j < ncol; j++) {
       cout << grid[i][j];
@@ -37,14 +38,16 @@ void Grid::show() const {
   }
 }
 
-void Grid::generatealive(vector<Position> v) {
-  for(Position p : v) {
-    grid[p[0]][p[1]].set_state(1);
-  }
+const Cell& Grid::getCell(Position pos) const { //NC
+  return grid[pos[0]][pos[1]];
 }
 
-const Cell& Grid::getCell(Position pos) const {
-  return grid[pos[0]][pos[1]];
+void Grid::generatealive(vector<Position> v, vector<int> states) { //susceptible a cambio preguntar profe pregunta del bloc de notas
+  Position p;
+  for(int i = 0; i < states.size(); i++) {
+    p = v[i];
+    grid[p[0]][p[1]].set_state(states[i]); //suponiendo que setstate transforma el número en puntero a estado correspondiente
+  }
 }
 
 void Grid::nextgen() {
@@ -76,17 +79,17 @@ void Grid::nextgen() {
 #include "cellclass.h"
 
 
-Cell::Cell() {
+Cell::Cell() { 
   position[0] = -1;
   position[1] = -1;
   state = 0;
 }
 
-void Cell::set_position(Position pos) {
+void Cell::set_position(Position pos) { //NC
     position = pos;
 }
 
-Position Cell::get_position() const{
+Position Cell::get_position() const{ //NC
   return position;
 }
 
