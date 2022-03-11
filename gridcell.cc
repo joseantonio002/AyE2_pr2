@@ -5,6 +5,40 @@
 //------------------------------------------------------------------
 /******** VOY A PONER "NC" EN LAS FUNCIONES QUE NO CAMBIEN******/
 
+
+//-----------------------------------------------------#include states
+
+
+void StateDead::neighbords(Position pos, const Grid& grid) {
+  Position np = {pos[0]-1, pos[1]-1};
+  nadults = 0;
+  for(int i = 0; i < 9; i++) {
+    if(grid.getCell(np).get_state() == 'a') {
+      nadults += 1;
+    }
+    np = {np[0], np[1]+1};
+    if(np[1] == pos[1]+1) { //llego al final de una fila, salto a la siguiente
+      np = {np[0]+1, np[1]-2};
+    }
+    else if(np == pos) { //si es la misma célula nos la saltamos
+      np = {np[0], np[1]+1};
+    }
+  }
+}
+
+Stateb* StateDead::nextState() {
+  Stateb* p = new StateDead;
+  if(nadults >= 2) {
+    p = new StateEgg;
+  }
+  return p;
+}
+
+
+
+
+//--------------------------------------------------------------------
+//--------------------------------------------#include grid
 Grid::Grid(int row, int colum) { //NC
   nrowo = row;
   ncolo = colum;
@@ -20,9 +54,9 @@ Grid::Grid(int row, int colum) { //NC
     for(int j = 0; j < colum; j++) {
       p[1] = j;
       grid[i][j].set_position(p);
-      /*if(i == 0 || j == 0 || i == row-1 || j == colum-1) { //células pared nunca se llegan a apuntar
-        grid[i][j].set_state();
-      }*/ //simplemente ignoramos las células pared a la hora de generatealive, se quedan sin estado
+      if(i == 0 || j == 0 || i == row-1 || j == colum-1) { //células pared
+        grid[i][j].set_state(new StateWall);
+      }
     }
   }
   nrow = row;
@@ -83,8 +117,7 @@ void Grid::nextgen() {
   show();
 }
 //---------------------------------------------------------------------------------------------------------------
-#include "cellclass.h"
-
+//-------------------------------------------#include cell
 Cell::Cell() { 
   position[0] = -1;
   position[1] = -1;
@@ -107,7 +140,6 @@ char Cell::get_state() const {
   return state->getState();
 }
 
-//¿sobrecargar operador en cada clase?
 std::ostream& operator<<(std::ostream& stream, const Cell& cell) {
   stream << cell.state->getState();
   return stream;
@@ -121,3 +153,4 @@ void Cell::updateState() {
   state = nextstate;
   delete nextstate;
 }
+//----------------------------------------------------------------------------
