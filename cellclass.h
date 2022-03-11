@@ -15,7 +15,7 @@ class Cell {
   Cell();
   void updateState(); //método para actualizar el estado de una cécula (utiliza neighbords en su interior)
   int neighbords(const Grid& grid); //método para hallar la vecindad (número de células vecinas vivas)
-  Stateb* get_state() const;
+  char get_state() const;
   void set_state(Stateb* x);
   Position get_position() const;
   void set_position(Position pos);

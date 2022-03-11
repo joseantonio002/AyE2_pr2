@@ -103,8 +103,8 @@ void Cell::set_state(Stateb* x) {
   state = x;
 }
 
-Stateb* Cell::get_state() const {
-  return state;
+char Cell::get_state() const {
+  return state->getState();
 }
 
 //¿sobrecargar operador en cada clase?
