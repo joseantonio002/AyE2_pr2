@@ -2,7 +2,6 @@
 #include "gridclass.h"
 //En el mismo fichero ya que ambas clases son dependientes la una de la otra
 //------------------------------------------------------------------
-#include "gridclass.h"
 /******** VOY A PONER "NC" EN LAS FUNCIONES QUE NO CAMBIEN******/
 
 Grid::Grid(int row, int colum) { //NC
@@ -20,18 +19,18 @@ Grid::Grid(int row, int colum) { //NC
     for(int j = 0; j < colum; j++) {
       p[1] = j;
       grid[i][j].set_position(p);
-      if(i == 0 || j == 0 || i == row-1 || j == colum-1) { //células pared
-        grid[i][j].set_state(-1);
-      }
+      /*if(i == 0 || j == 0 || i == row-1 || j == colum-1) { //células pared nunca se llegan a apuntar
+        grid[i][j].set_state();
+      }*/ //simplemente ignoramos las células pared a la hora de generatealive, se quedan sin estado
     }
   }
   nrow = row;
   ncol = colum;
 }
 
-void Grid::show() const { //NC
-  for(int i = 0; i < nrow; i++) {
-    for(int j = 0; j < ncol; j++) {
+void Grid::show() const { 
+  for(int i = 1; i <= nrowo; i++) {
+    for(int j = 1; j < ncolo; j++) {
       cout << grid[i][j];
     }
     cout << endl;
@@ -44,10 +43,29 @@ const Cell& Grid::getCell(Position pos) const { //NC
 
 void Grid::generatealive(vector<Position> v, vector<int> states) { //susceptible a cambio preguntar profe pregunta del bloc de notas
   Position p;
+  Stateb* base;
   for(int i = 0; i < states.size(); i++) {
     p = v[i];
-    grid[p[0]][p[1]].set_state(states[i]); //suponiendo que setstate transforma el número en puntero a estado correspondiente
+    switch (states[i]) {
+    case 1:
+      base = new StateEgg;
+      break;
+    case 2:
+      base = new StateLarva;
+      break;
+    case 3:
+      base = new StatePupa;
+      break; 
+    case 4:
+      base = new StateAdult;
+      break; 
+    default:
+      cerr << "Estado no válido" << endl;
+      exit(EXIT_FAILURE);
+      break;
+    }
   }
+  grid[p[0]][p[1]].set_state(base);
 }
 
 void Grid::nextgen() {
@@ -78,63 +96,39 @@ void Grid::nextgen() {
 //---------------------------------------------------------------------------------------------------------------
 #include "cellclass.h"
 
-
 Cell::Cell() { 
   position[0] = -1;
   position[1] = -1;
-  state = 0;
+  state = new StateDead;
 }
 
 void Cell::set_position(Position pos) { //NC
-    position = pos;
+  position = pos;
 }
 
 Position Cell::get_position() const{ //NC
   return position;
 }
 
-void Cell::set_state(State x) {
+void Cell::set_state(Stateb* x) {
   state = x;
 }
 
-State Cell::get_state() const {
+Stateb* Cell::get_state() const {
   return state;
 }
 
+//¿sobrecargar operador en cada clase?
 std::ostream& operator<<(std::ostream& stream, const Cell& cell) {
-  if(cell.state == 0) stream << '-';
-  else if(cell.state == -1) stream << '+'; //celulas muro
-  else stream << 'x';
+  stream << cell.state;
   return stream;
 }
 
 int Cell::neighbords(const Grid& grid) { //devuelve células vecinas vivas
-  if(state == -1) {
-    cerr << "Célula no válida" << endl;
-    exit(EXIT_FAILURE);
-  }
-
-  int nalive = 0;
-  Position ps = {position[0]-1, position[1]-1};
-  for(int i = 0; i < 3; i++) { //comprueba fila de arriba de la célula
-    if(grid.getCell(ps).get_state() == 1) nalive += 1;
-    ps = {ps[0], ps[1]+1};
-  }
-
-  ps = {ps[0]+1, ps[1]-3}; //comprueba misma fila de la célula
-  if(grid.getCell(ps).get_state() == 1) nalive += 1;
-  ps = {ps[0], ps[1]+2};
-  if(grid.getCell(ps).get_state() == 1) nalive += 1;
-
-  ps = {ps[0]+1, ps[1]-2};
-  for(int i = 0; i < 3; i++) { //comprueba fila de abajo
-    if(grid.getCell(ps).get_state() == 1) nalive += 1;
-    ps = {ps[0], ps[1]+1};
-  }
-
-  return nalive;
+ 
 }
+
 void Cell::updateState() {
-    if(state == 0) state = 1;
-    else state = 0;
+  if(state == 0) state = 1;
+  else state = 0;
 }

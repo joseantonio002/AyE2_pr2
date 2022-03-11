@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "cellclass.h"
+#include "states.h"
 using namespace std;
 
 
