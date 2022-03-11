@@ -69,29 +69,17 @@ void Grid::generatealive(vector<Position> v, vector<int> states) { //susceptible
 }
 
 void Grid::nextgen() {
-  vector<Position> vectorpos;
-  Position ps;
-  int neighbords;
   for(int i = 1; i <= nrowo; i++) { //recorre solo las celulas del interior no las pared
     for(int j = 1; j <= ncolo; j++) {
-      ps = {i,j};
-      neighbords = grid[i][j].neighbords(*this);
-      if(grid[i][j].get_state() == 0) { //comprobar si cambia de estado y si cambia guardar posición
-        if(neighbords == 3) {
-          vectorpos.push_back(ps);
-        }
-      }
-      else {
-        if(neighbords != 2 && neighbords != 3) {
-          vectorpos.push_back(ps);
-        }
+        grid[i][j].neighbords(*this);
       }
     }
+  for(int i = 1; i <= nrowo; i++) { 
+    for(int j = 1; j <= ncolo; j++) {
+        grid[i][j].updateState();
+    }
   }
-
-  for(Position p : vectorpos) {
-    grid[p[0]][p[1]].updateState();
-  }
+  show();
 }
 //---------------------------------------------------------------------------------------------------------------
 #include "cellclass.h"
@@ -120,7 +108,7 @@ Stateb* Cell::get_state() const {
 
 //¿sobrecargar operador en cada clase?
 std::ostream& operator<<(std::ostream& stream, const Cell& cell) {
-  stream << cell.state;
+  stream << cell.state->getState();
   return stream;
 }
 
@@ -129,6 +117,6 @@ int Cell::neighbords(const Grid& grid) { //devuelve células vecinas vivas
 }
 
 void Cell::updateState() {
-  if(state == 0) state = 1;
-  else state = 0;
+  state = nextstate;
+  nextstate = NULL;
 }
