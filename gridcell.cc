@@ -1,5 +1,6 @@
 #include "cellclass.h"
 #include "gridclass.h"
+#include "states.h"
 //En el mismo fichero ya que ambas clases son dependientes la una de la otra
 //------------------------------------------------------------------
 /******** VOY A PONER "NC" EN LAS FUNCIONES QUE NO CAMBIEN******/
@@ -30,7 +31,7 @@ Grid::Grid(int row, int colum) { //NC
 
 void Grid::show() const { 
   for(int i = 1; i <= nrowo; i++) {
-    for(int j = 1; j < ncolo; j++) {
+    for(int j = 1; j <= ncolo; j++) {
       cout << grid[i][j];
     }
     cout << endl;
@@ -113,10 +114,10 @@ std::ostream& operator<<(std::ostream& stream, const Cell& cell) {
 }
 
 int Cell::neighbords(const Grid& grid) { //devuelve células vecinas vivas
- 
+  return -1;
 }
 
 void Cell::updateState() {
   state = nextstate;
-  nextstate = NULL;
+  delete nextstate;
 }
