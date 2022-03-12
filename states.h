@@ -47,9 +47,9 @@ class StateEgg : public Stateb {
 
 class StateLarva : public Stateb {
  public:
-  Stateb* nextState(){Stateb* x = new StateEgg; return x;}
+  Stateb* nextState();
   char getState() const {return 'l';}
-  void neighbords(Position pos, const Grid& grid){cout << "text";}
+  void neighbords(Position pos, const Grid& grid);
   ~StateLarva() {}
  private:
   int nlarva;
