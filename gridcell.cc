@@ -56,7 +56,7 @@ void StateEgg::neighbords(Position pos, const Grid& grid) {
 
 Stateb* StateEgg::nextState() {
   Stateb* p = new StateLarva;
-  if(nlarva < negg) {
+  if(nlarva > negg) {
     p = new StateDead;
   }
   return p;
@@ -115,7 +115,6 @@ void StateAdult::neighbords(Position pos, const Grid& grid) {
   for(int i = 0; i < 8; i++) {
     if(grid.getCell(np).get_state() == 'a') {
       isadult = true;
-      break;
     }
     vecinity(np, pos);
   }
@@ -124,7 +123,7 @@ void StateAdult::neighbords(Position pos, const Grid& grid) {
 Stateb* StateAdult::nextState() {
   Stateb* p = new StateDead;
   if(isadult) {
-    p = new StateAdult;
+    p = new StateEgg;
   }
   return p;
 }
