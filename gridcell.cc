@@ -7,22 +7,26 @@
 
 
 //-----------------------------------------------------#include states
-
+void Stateb::vecinity(Position& np, const Position& pos) {
+  if(np[1] == pos[1]+1) { //llego al final de una fila, salto a la siguiente
+    np = {np[0]+1, np[1]-2};
+    return;
+  }
+  np = {np[0], np[1]+1};
+  if(np == pos) {
+    np = {np[0], np[1]+1};
+  }
+}
 
 void StateDead::neighbords(Position pos, const Grid& grid) {
   Position np = {pos[0]-1, pos[1]-1};
   nadults = 0;
-  for(int i = 0; i < 9; i++) {
+  for(int i = 0; i < 8; i++) {
+    cout << np[0] << ' ' << np[1] << endl;
     if(grid.getCell(np).get_state() == 'a') {
       nadults += 1;
     }
-    np = {np[0], np[1]+1};
-    if(np[1] == pos[1]+1) { //llego al final de una fila, salto a la siguiente
-      np = {np[0]+1, np[1]-2};
-    }
-    else if(np == pos) { //si es la misma célula nos la saltamos
-      np = {np[0], np[1]+1};
-    }
+    vecinity(np, pos);
   }
 }
 
