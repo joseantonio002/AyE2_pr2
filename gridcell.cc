@@ -19,7 +19,6 @@ void Stateb::vecinity(Position& np, const Position& pos) {
 }
 
 //STATEDEAD
-
 void StateDead::neighbords(Position pos, const Grid& grid) {
   Position np = {pos[0]-1, pos[1]-1};
   nadults = 0;
@@ -41,7 +40,6 @@ Stateb* StateDead::nextState() {
 
 //----------
 //STATEEGG
-
 void StateEgg::neighbords(Position pos, const Grid& grid) {
   Position np = {pos[0]-1, pos[1]-1};
   negg = 0; nlarva = 0;
@@ -65,7 +63,6 @@ Stateb* StateEgg::nextState() {
 }
 //-----------
 //STATELARVA
-
 void StateLarva::neighbords(Position pos, const Grid& grid) {
   Position np = {pos[0]-1, pos[1]-1};
   eggpupad = 0; nlarva = 0;
@@ -89,7 +86,6 @@ Stateb* StateLarva::nextState() {
 }
 //-----------
 //STATEPUPA
-
 void StatePupa::neighbords(Position pos, const Grid& grid) {
   Position np = {pos[0]-1, pos[1]-1};
   other = 0; nlarva = 0;
@@ -113,7 +109,6 @@ Stateb* StatePupa::nextState() {
 }
 //-----------
 //STATEADULT
-
 void StateAdult::neighbords(Position pos, const Grid& grid) {
   Position np = {pos[0]-1, pos[1]-1};
   isadult = false;
@@ -208,12 +203,12 @@ void Grid::generatealive(vector<Position> v, vector<char> states) { //susceptibl
 void Grid::nextgen() {
   for(int i = 1; i <= nrowo; i++) { //recorre solo las celulas del interior no las pared
     for(int j = 1; j <= ncolo; j++) {
-        grid[i][j].neighbords(*this);
-      }
+      grid[i][j].neighbords(*this);
     }
+  }
   for(int i = 1; i <= nrowo; i++) { 
     for(int j = 1; j <= ncolo; j++) {
-        grid[i][j].updateState();
+      grid[i][j].updateState();
     }
   }
   show();
@@ -252,12 +247,13 @@ std::ostream& operator<<(std::ostream& stream, const Cell& cell) {
   return stream;
 }
 
-int Cell::neighbords(const Grid& grid) { //devuelve células vecinas vivas
-  return -1;
+void Cell::neighbords(const Grid& grid) { //devuelve células vecinas vivas
+  state->neighbords(position, grid);
+  nextstate = state->nextState();
 }
 
 void Cell::updateState() {
   state = nextstate;
-  delete nextstate;
+  nextstate = NULL;
 }
 //----------------------------------------------------------------------------

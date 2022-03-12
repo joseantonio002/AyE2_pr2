@@ -44,13 +44,11 @@ int main() {
   cout << "Turno 0: " << endl;
   grid.show();
   cout << endl;
-  /*
   for(int i = 1; i <= nturnos; i++) {
     cout << "Turno: " << i << endl;
     grid.nextgen();
-    grid.show();
     cout << endl;
-  }*/
+  }
 
   return 0;
 }
