@@ -23,16 +23,17 @@ int main() {
   cin.ignore(); //Para que no detecte el enter como el getline del while
   Grid grid(nfilas, ncolumnas);
   grid.show();
-  /*cout << "Introduce posiciones de células y su estado (poscionx espacio posiciony espacio estado) empezando en 1, pulsa ENTER cuando termines" << endl;
-  int x,y,state;
+  cout << "Introduce posiciones de células y su estado (poscionx espacio posiciony espacio estado) empezando en 1, pulsa ENTER cuando termines" << endl;
+  int x,y;
+  char state;
   Position p;
   vector<Position> ps;
-  vector<int> states;
+  vector<char> states;
   string s;
   while (std::getline(cin, s) && !s.empty()) {
     std::stringstream ss(s);
     ss >> x >> y >> state;
-    if (!ss || x < 0 || y < 0 || state < 0 )
+    if (!ss || x < 0 || y < 0)
       cout << "Invalido" << endl;
     else 
       p[0] = x; p[1] = y;
@@ -43,6 +44,7 @@ int main() {
   cout << "Turno 0: " << endl;
   grid.show();
   cout << endl;
+  /*
   for(int i = 1; i <= nturnos; i++) {
     cout << "Turno: " << i << endl;
     grid.nextgen();

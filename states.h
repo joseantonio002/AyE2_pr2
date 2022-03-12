@@ -36,10 +36,13 @@ class StateDead : public Stateb {
 
 class StateEgg : public Stateb {
  public:
-  Stateb* nextState(){Stateb* x = new StateEgg; return x;}
+  Stateb* nextState();
   char getState() const {return 'e';}
-  void neighbords(Position pos, const Grid& grid){cout << "text";}
+  void neighbords(Position pos, const Grid& grid);
   ~StateEgg() {}
+ private:
+  int nlarva;
+  int negg;
 };
 
 class StateLarva : public Stateb {
@@ -48,22 +51,30 @@ class StateLarva : public Stateb {
   char getState() const {return 'l';}
   void neighbords(Position pos, const Grid& grid){cout << "text";}
   ~StateLarva() {}
+ private:
+  int nlarva;
+  int eggpupad;
 };
 
 class StatePupa : public Stateb {
  public:
-  Stateb* nextState(){Stateb* x = new StateEgg; return x;}
+  Stateb* nextState();
   char getState() const {return 'p';}
-  void neighbords(Position pos, const Grid& grid){cout << "text";}
+  void neighbords(Position pos, const Grid& grid);
   ~StatePupa() {}
+ private:
+  int nlarva;
+  int other;
 };
 
 class StateAdult : public Stateb {
  public:
-  Stateb* nextState(){Stateb* x = new StateEgg; return x;}
+  Stateb* nextState();
   char getState() const {return 'a';}
-  void neighbords(Position pos, const Grid& grid){cout << "text";}
+  void neighbords(Position pos, const Grid& grid);
   ~StateAdult() {}
+ private:
+  bool isadult;
 };
 
 #endif

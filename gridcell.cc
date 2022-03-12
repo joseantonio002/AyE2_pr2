@@ -18,11 +18,12 @@ void Stateb::vecinity(Position& np, const Position& pos) {
   }
 }
 
+//STATEDEAD
+
 void StateDead::neighbords(Position pos, const Grid& grid) {
   Position np = {pos[0]-1, pos[1]-1};
   nadults = 0;
   for(int i = 0; i < 8; i++) {
-    cout << np[0] << ' ' << np[1] << endl;
     if(grid.getCell(np).get_state() == 'a') {
       nadults += 1;
     }
@@ -38,10 +39,107 @@ Stateb* StateDead::nextState() {
   return p;
 }
 
+//----------
+//STATEEGG
 
+void StateEgg::neighbords(Position pos, const Grid& grid) {
+  Position np = {pos[0]-1, pos[1]-1};
+  negg = 0; nlarva = 0;
+  for(int i = 0; i < 8; i++) {
+    if(grid.getCell(np).get_state() == 'l') {
+      nlarva += 1;
+    }
+    else if(grid.getCell(np).get_state() == 'e') {
+      negg += 1;
+    }
+    vecinity(np, pos);
+  }
+}
 
+Stateb* StateEgg::nextState() {
+  Stateb* p = new StateLarva;
+  if(nlarva < negg) {
+    p = new StateDead;
+  }
+  return p;
+}
+//-----------
+//STATELARVA
 
+void StateLarva::neighbords(Position pos, const Grid& grid) {
+  Position np = {pos[0]-1, pos[1]-1};
+  eggpupad = 0; nlarva = 0;
+  for(int i = 0; i < 8; i++) {
+    if(grid.getCell(np).get_state() == 'l') {
+      nlarva += 1;
+    }
+    else if(grid.getCell(np).get_state() == 'e' || grid.getCell(np).get_state() == 'p' || grid.getCell(np).get_state() == 'a') {
+      eggpupad += 1;
+    }
+    vecinity(np, pos);
+  }
+}
+
+Stateb* StateLarva::nextState() {
+  Stateb* p = new StatePupa;
+  if(nlarva > eggpupad) {
+    p = new StateDead;
+  }
+  return p;
+}
+//-----------
+//STATEPUPA
+
+void StatePupa::neighbords(Position pos, const Grid& grid) {
+  Position np = {pos[0]-1, pos[1]-1};
+  other = 0; nlarva = 0;
+  for(int i = 0; i < 8; i++) {
+    if(grid.getCell(np).get_state() == 'l') {
+      nlarva += 1;
+    }
+    else{
+      other += 1;
+    }
+    vecinity(np, pos);
+  }
+}
+
+Stateb* StatePupa::nextState() {
+  Stateb* p = new StateAdult;
+  if(nlarva > other) {
+    p = new StateDead;
+  }
+  return p;
+}
+//-----------
+//STATEADULT
+
+void StateAdult::neighbords(Position pos, const Grid& grid) {
+  Position np = {pos[0]-1, pos[1]-1};
+  isadult = false;
+  for(int i = 0; i < 8; i++) {
+    if(grid.getCell(np).get_state() == 'a') {
+      isadult = true;
+      break;
+    }
+    vecinity(np, pos);
+  }
+}
+
+Stateb* StateAdult::nextState() {
+  Stateb* p = new StateDead;
+  if(isadult) {
+    p = new StateAdult;
+  }
+  return p;
+}
+//-----------
 //--------------------------------------------------------------------
+
+
+
+
+
 //--------------------------------------------#include grid
 Grid::Grid(int row, int colum) { //NC
   nrowo = row;
@@ -80,22 +178,22 @@ const Cell& Grid::getCell(Position pos) const { //NC
   return grid[pos[0]][pos[1]];
 }
 
-void Grid::generatealive(vector<Position> v, vector<int> states) { //susceptible a cambio preguntar profe pregunta del bloc de notas
+void Grid::generatealive(vector<Position> v, vector<char> states) { //susceptible a cambio preguntar profe pregunta del bloc de notas
   Position p;
   Stateb* base;
   for(int i = 0; i < states.size(); i++) {
     p = v[i];
     switch (states[i]) {
-    case 1:
+    case 'e':
       base = new StateEgg;
       break;
-    case 2:
+    case 'l':
       base = new StateLarva;
       break;
-    case 3:
+    case 'p':
       base = new StatePupa;
       break; 
-    case 4:
+    case 'a':
       base = new StateAdult;
       break; 
     default:
@@ -121,6 +219,11 @@ void Grid::nextgen() {
   show();
 }
 //---------------------------------------------------------------------------------------------------------------
+
+
+
+
+
 //-------------------------------------------#include cell
 Cell::Cell() { 
   position[0] = -1;
