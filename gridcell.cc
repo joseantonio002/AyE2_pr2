@@ -201,8 +201,8 @@ void Grid::generatealive(vector<Position> v, vector<char> states) { //susceptibl
       exit(EXIT_FAILURE);
       break;
     }
+    grid[p[0]][p[1]].set_state(base);
   }
-  grid[p[0]][p[1]].set_state(base);
 }
 
 void Grid::nextgen() {
