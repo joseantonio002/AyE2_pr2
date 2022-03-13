@@ -23,7 +23,7 @@ int main() {
   cin.ignore(); //Para que no detecte el enter como el getline del while
   Grid grid(nfilas, ncolumnas);
   grid.show();
-  cout << "Introduce posiciones de células y su estado (poscionx espacio posiciony espacio estado) empezando en 1, pulsa ENTER cuando termines" << endl;
+  cout << "Introduce posiciones de células y su estado (poscionx espacio posiciony espacio estado) siendo el estado (e, l, p, a), pulsa ENTER cuando termines" << endl;
   int x,y;
   char state;
   Position p;
